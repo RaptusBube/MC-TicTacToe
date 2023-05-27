@@ -1,0 +1,12 @@
+name: TicTacToe
+version: 1.0.0
+main: de.raptusbube.Main
+api-version: 1.19
+prefix: §7[§4TicTacToe§7]
+authors: [ RaptusBube ]
+description: TicTacToe
+commands:
+   ttt:
+      description: ttt Befehl
+   tictactoe:
+      description: ttt Befehl
