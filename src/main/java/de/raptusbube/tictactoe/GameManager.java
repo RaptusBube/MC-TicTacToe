@@ -36,7 +36,7 @@ public class GameManager {
 
     public Game getGameFromPlayer(Player player){
         for(Game game : games){
-            if(game.getPlayer1().equals(player) || game.getPlayer2().equals(player)){
+            if(game.getPlayer1().equals(player) || (game.getPlayer2() != null && game.getPlayer2().equals(player)) || game.getSpectatorList().contains(player)){
                 return game;
             }
         }
@@ -63,7 +63,9 @@ public class GameManager {
 
     public Game isPlayerInGame(Player player){
         for(Game game : games){
-            if(game.getPlayer1().equals(player) || game.getPlayer2().equals(player)){
+            if(game.getPlayer1().equals(player)){
+                return game;
+            }else if(game.getPlayer2() != null && game.getPlayer2().equals(player)){
                 return game;
             }
         }

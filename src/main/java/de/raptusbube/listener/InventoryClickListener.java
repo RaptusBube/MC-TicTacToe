@@ -20,18 +20,29 @@ public class InventoryClickListener implements Listener {
             if((game = Main.getMain().getGameManager().isPlayerInGame(player)) != null){
                 Inventory inventory = event.getInventory();
                 if(inventory.getItem(event.getRawSlot())==null){
-                    boolean player1 = false;
-                    boolean player2 = false;
-                    if(game.getPlayer1().equals(player)){
-                        player1 = true;
-                    }else if(game.getPlayer2().equals(player)){
-                        player2 = true;
+                    if(game.getNextMove().equals(player)){
+                        boolean player1 = false;
+                        boolean player2 = false;
+                        if(game.getPlayer1().equals(player)){
+                            player1 = true;
+                            game.setNextMove(game.getPlayer2());
+                        }else if(game.getPlayer2().equals(player)){
+                            player2 = true;
+                            game.setNextMove(game.getPlayer1());
+                        }
+                        game.getGameBoard().newInput(player1, player2, event.getRawSlot(), game);
+                        game.updateGameBoard();
+
+                    }else{
+                        //System.out.println("Du bist nicht dran!");
+                        player.sendMessage(Main.getMain().getPrefix()+"Du bist nicht dran!");
                     }
-                    game.getGameBoard().newInput(player1, player2, event.getRawSlot(), game);
-                    game.updateGameBoard();
+
                 }else{
-                    event.setCancelled(true);
+                    //System.out.println("Slot bereits belegt!");
+                    player.sendMessage(Main.getMain().getPrefix()+"Slot bereits belegt!");
                 }
+                event.setCancelled(true);
             }
         }
     }

@@ -1,6 +1,7 @@
 package de.raptusbube.tictactoe;
 
 import de.raptusbube.Main;
+import org.bukkit.entity.Player;
 
 public class GameBoard {
 
@@ -56,27 +57,60 @@ public class GameBoard {
             case 7 -> getColum2().getField3().setFieldStatus(getFieldByPlayer(player1, player2));
             case 8 -> getColum3().getField3().setFieldStatus(getFieldByPlayer(player1, player2));
         }
-        GameBoardStatus gameBoardStatus = getStatus();
+        GameBoardStatus gameBoardStatus = getStatus(game);
         if(gameBoardStatus.equals(GameBoardStatus.PLAYER1_WON)){
-            System.out.println("Spieler1 hat gewonnen!");
-        }else if(gameBoardStatus.equals(GameBoardStatus.PLAYER2_WOgit init N)){
-            System.out.println("Spieler2 hat gewonnen!");
+            //System.out.println("Spieler1 hat gewonnen!");
+            game.setWinner(game.getPlayer1());
+            for(Player player : game.getAllPlayerInGame()){
+                player.sendMessage(Main.getMain().getPrefix()+game.getWinner().getName()+" hat das Spiel gewonnen!");
+            }
+            game.stopGame();
+            Main.getMain().getGameManager().removeGame(game);
+        }else if(gameBoardStatus.equals(GameBoardStatus.PLAYER2_WON)){
+            //System.out.println("Spieler2 hat gewonnen!");
+            game.setWinner(game.getPlayer2());
+            for(Player player : game.getAllPlayerInGame()){
+                player.sendMessage(Main.getMain().getPrefix()+game.getWinner().getName()+" hat das Spiel gewonnen!");
+            }
+            game.stopGame();
+            Main.getMain().getGameManager().removeGame(game);
         }else if(gameBoardStatus.equals(GameBoardStatus.NO_WINNER)){
-            System.out.println("Das Spiel endete Unentschieden!");
+            //System.out.println("Das Spiel endete Unentschieden!");
+            for(Player player : game.getAllPlayerInGame()){
+                player.sendMessage(Main.getMain().getPrefix()+"Das Spiel endet unentschieden!");
+            }
+            game.stopGame();
             Main.getMain().getGameManager().removeGame(game);
         }
         //return getStatus();
     }
-    public GameBoardStatus getStatus(){
-        if(getColum1().getField1().equals(getColum1().getField2()) && getColum1().getField2().equals(getColum1().getField3())){
+    public GameBoardStatus getStatus(Game game){
+        //vertikal
+        if(getColum1().getField1().getFieldStatus().equals(getColum1().getField2().getFieldStatus()) && getColum1().getField2().getFieldStatus().equals(getColum1().getField3().getFieldStatus()) && getColum1().getField3().getFieldStatus() != Colum.Field.FieldStatus.EMPTY){
+            game.visualizeWinner(0);
             return getPlayerFromFieldStatus(getColum1().getField1().getFieldStatus());
-        }else if(getColum2().getField1().equals(getColum2().getField2()) && getColum2().getField2().equals(getColum2().getField3())){
+        }else if(getColum2().getField1().getFieldStatus().equals(getColum2().getField2().getFieldStatus()) && getColum2().getField2().getFieldStatus().equals(getColum2().getField3().getFieldStatus()) && getColum2().getField3().getFieldStatus() != Colum.Field.FieldStatus.EMPTY){
+            game.visualizeWinner(1);
             return getPlayerFromFieldStatus(getColum2().getField1().getFieldStatus());
-        }else if(getColum3().getField1().equals(getColum3().getField2()) && getColum3().getField2().equals(getColum3().getField3())){
-            return getPlayerFromFieldStatus(getColum3().getField1().getFieldStatus());
-        }else if(getColum1().getField1().equals(getColum2().getField2()) && getColum2().getField2().equals(getColum3().getField3())){
+        }else if(getColum3().getField1().getFieldStatus().equals(getColum3().getField2().getFieldStatus()) && getColum3().getField2().getFieldStatus().equals(getColum3().getField3().getFieldStatus()) && getColum3().getField3().getFieldStatus() != Colum.Field.FieldStatus.EMPTY) {
+            game.visualizeWinner(2);
+            return getPlayerFromFieldStatus(getColum2().getField1().getFieldStatus());
+        //horizontal
+        }else if(getColum1().getField1().getFieldStatus().equals(getColum2().getField1().getFieldStatus()) && getColum2().getField1().getFieldStatus().equals(getColum3().getField1().getFieldStatus()) && getColum1().getField1().getFieldStatus() != Colum.Field.FieldStatus.EMPTY){
+            game.visualizeWinner(3);
+            return getPlayerFromFieldStatus(getColum1().getField1().getFieldStatus());
+        }else if(getColum1().getField2().getFieldStatus().equals(getColum2().getField2().getFieldStatus()) && getColum2().getField2().getFieldStatus().equals(getColum3().getField2().getFieldStatus()) && getColum1().getField2().getFieldStatus() != Colum.Field.FieldStatus.EMPTY){
+            game.visualizeWinner(4);
+            return getPlayerFromFieldStatus(getColum1().getField2().getFieldStatus());
+        }else if(getColum1().getField3().getFieldStatus().equals(getColum2().getField3().getFieldStatus()) && getColum2().getField3().getFieldStatus().equals(getColum3().getField3().getFieldStatus()) && getColum1().getField3().getFieldStatus() != Colum.Field.FieldStatus.EMPTY){
+            game.visualizeWinner(5);
+            return getPlayerFromFieldStatus(getColum1().getField3().getFieldStatus());
+        //cross
+        }else if(getColum1().getField1().getFieldStatus().equals(getColum2().getField2().getFieldStatus()) && getColum2().getField2().getFieldStatus().equals(getColum3().getField3().getFieldStatus()) && getColum3().getField3().getFieldStatus() != Colum.Field.FieldStatus.EMPTY){
+            game.visualizeWinner(6);
             return getPlayerFromFieldStatus(getColum3().getField3().getFieldStatus());
-        }else if(getColum1().getField3().equals(getColum2().getField2()) && getColum2().getField2().equals(getColum3().getField1())){
+        }else if(getColum1().getField3().getFieldStatus().equals(getColum2().getField2().getFieldStatus()) && getColum2().getField2().getFieldStatus().equals(getColum3().getField1().getFieldStatus()) && getColum3().getField1().getFieldStatus() != Colum.Field.FieldStatus.EMPTY){
+            game.visualizeWinner(7);
             return getPlayerFromFieldStatus(getColum3().getField1().getFieldStatus());
         }else if(!getColum1().getField1().getFieldStatus().equals(Colum.Field.FieldStatus.EMPTY) &&
                 !getColum1().getField2().getFieldStatus().equals(Colum.Field.FieldStatus.EMPTY) &&
