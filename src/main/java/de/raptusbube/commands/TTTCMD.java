@@ -39,15 +39,11 @@ public class TTTCMD implements CommandExecutor {
                                         Main.getMain().getGameManager().removeGame(game);
                                         player.sendMessage(Main.getMain().getPrefix()+"Du hast das Spiel verlassen - Das Spiel wird entfernt!");
                                     }else{
-                                        //player.getInventory().setContents(game.getPlayerOneContents());
-                                        //player.getInventory().setArmorContents(game.getPlayerOneArmor());
-                                        //game.setPlayer1(game.getPlayer2());
-                                        //game.setNextMove(game.getPlayer2());
                                         player.sendMessage(Main.getMain().getPrefix()+"Du hast das Spiel verlassen!");
                                         if(game.getGameStatus().equals(GameStatus.RUNNING)){
                                             for(Player player1 : game.getAllPlayerInGame()){
-                                                player1.sendMessage(Main.getMain().getPrefix()+game.getPlayer2().getName()+" hat das Spiel verlassen!");
-                                                player1.sendMessage(Main.getMain().getPrefix()+game.getPlayer1().getName()+" hat gewonnen!");
+                                                player1.sendMessage(Main.getMain().getPrefix()+game.getPlayer1().getName()+" hat das Spiel verlassen!");
+                                                player1.sendMessage(Main.getMain().getPrefix()+game.getPlayer2().getName()+" hat gewonnen!");
                                             }
                                             game.stopGame();
                                             Main.getMain().getGameManager().removeGame(game);
@@ -60,7 +56,9 @@ public class TTTCMD implements CommandExecutor {
                                         player.sendMessage(Main.getMain().getPrefix()+"Du hast das Spiel verlassen!");
                                         for(Player player1 : game.getAllPlayerInGame()){
                                             player1.sendMessage(Main.getMain().getPrefix()+player.getName()+" hat das Spiel verlassen!");
+                                            player1.sendMessage(Main.getMain().getPrefix()+game.getPlayer1().getName()+" hat gewonnen!");
                                         }
+                                        game.stopGame();
                                         Main.getMain().getGameManager().removeGame(game);
                                     }
                                 }else{
@@ -105,7 +103,6 @@ public class TTTCMD implements CommandExecutor {
                             clickMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ttt join "+player.getName()));
                             clickMessage.addExtra(ChatColor.GREEN+"Klicke hier zum annehmen.");
                             message.addExtra(clickMessage);
-                            player1.sendMessage(message.toString());
                             player1.spigot().sendMessage(message);
                         }else{
                             player.sendMessage(Main.getMain().getPrefix()+"Spieler "+args[1]+" nicht gefunden!");

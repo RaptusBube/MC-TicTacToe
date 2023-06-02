@@ -19,6 +19,8 @@ public class InventoryClickListener implements Listener {
             Game game;
             if((game = Main.getMain().getGameManager().isPlayerInGame(player)) != null){
                 Inventory inventory = event.getInventory();
+                if(event.getCurrentItem() == null) return;
+                if(event.getRawSlot() > 8) return;
                 if(inventory.getItem(event.getRawSlot())==null){
                     if(game.getNextMove().equals(player)){
                         boolean player1 = false;
